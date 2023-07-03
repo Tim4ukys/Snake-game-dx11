@@ -1,0 +1,2 @@
+G:/cpp/VS 2022 Project/SnakeDX11/cmake-build-debug/CMakeFiles/edit_cache.dir
+G:/cpp/VS 2022 Project/SnakeDX11/cmake-build-debug/CMakeFiles/rebuild_cache.dir
