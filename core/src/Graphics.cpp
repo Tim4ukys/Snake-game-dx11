@@ -78,7 +78,7 @@ core::Graphics::GraphicsEngine::GraphicsEngine(const Window& window, float width
     m_pDeviceContext->RSSetViewports(1, &vp);
 
     ID3DBlob* pBuff;
-    compilingShader("shader.fx", "VS", "vs_4_0", &pBuff);
+    compilingShader("shaders/shader.fx", "VS", "vs_4_0", &pBuff);
     m_pDevice->CreateVertexShader(pBuff->GetBufferPointer(), pBuff->GetBufferSize(), NULL, &m_pVertexShader);
     D3D11_INPUT_ELEMENT_DESC layout[] =
     {
@@ -90,13 +90,14 @@ core::Graphics::GraphicsEngine::GraphicsEngine(const Window& window, float width
     pBuff->Release();
     m_pDeviceContext->IASetInputLayout(m_pInputLayout.Get());
 
-    compilingShader("shader.fx", "PS", "ps_4_0", &pBuff);
+    compilingShader("shaders/shader.fx", "PS", "ps_4_0", &pBuff);
     m_pDevice->CreatePixelShader(pBuff->GetBufferPointer(), pBuff->GetBufferSize(), NULL, &m_pPixelShader);
     pBuff->Release();
 
     m_constBuffer.scaleScreen.r[0].m128_f32[0] = 2.f / widthX;
+    m_constBuffer.scaleScreen.r[0].m128_f32[3] = -1.f;
     m_constBuffer.scaleScreen.r[1].m128_f32[1] = 2.f / heightY;
-
+    m_constBuffer.scaleScreen.r[1].m128_f32[3] = -1.f;
 
     D3D11_BUFFER_DESC dsConstBuffer;
     dsConstBuffer.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
