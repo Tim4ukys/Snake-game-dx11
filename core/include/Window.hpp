@@ -4,6 +4,7 @@
 #include <string_view>
 #include <Windows.h>
 #include <functional>
+#include <asmjit/asmjit.h>
 
 namespace core {
     class Window {
@@ -16,13 +17,16 @@ namespace core {
         const int m_nScreenWidth;
         const int m_nScreenHeight;
 
+        asmjit::JitRuntime m_rtWndProc;
+
     public:
 #ifndef UNICODE
         using str = std::string_view;
 #else
         using str = std::wstring_view;
 #endif
-        explicit Window(HINSTANCE hInstance, const str& windowName, const str& className, int width, int height, int cmdShow, WNDPROC wnd_proc);
+        explicit Window(HINSTANCE hInstance, const str& windowName, const str& className, int width, int height, int cmdShow, 
+            std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> wnd_proc);
 
         inline auto getHWND() const noexcept {
             return m_hWnd;
