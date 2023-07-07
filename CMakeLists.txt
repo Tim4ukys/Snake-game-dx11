@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 3.26)
 project("SnakeDX11")
 
 add_subdirectory(core)
+add_subdirectory(imgui)
 add_subdirectory(Snake)
 
 add_custom_target(resources_sync

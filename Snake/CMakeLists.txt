@@ -6,7 +6,7 @@ set(SOURCE
 
 add_executable(${PROJECT_NAME} WIN32 ${SOURCE})
 
-target_link_libraries(${PROJECT_NAME} SNAKE::CORE)
+target_link_libraries(${PROJECT_NAME} SNAKE::CORE SNAKE::IMGUI)
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     CXX_STANDARD 17        
