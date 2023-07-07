@@ -2,9 +2,56 @@
 #include <D3DX11.h>
 #include <D3Dcompiler.h>
 
-core::Graphics::SolidBox::SolidBox(CUnkown<GraphicsEngine>& ge, float x, float y, float width, float height, DirectX::XMVECTORF32 color)
-    : m_Pos(x, y), m_pGE(ge)
+core::Graphics::Box::Box(GraphicsEngine* pGE, float x, float y, float width, float height, float sizeLine, DirectX::XMVECTORF32 color)
 {
+    m_pGE = pGE;
+    m_Pos.x = x;
+    m_Pos.y = y;
+
+    stVertex vertices[]{
+        {DirectX::XMFLOAT3(0.0f, 0.f, 0.5f), color},
+        {DirectX::XMFLOAT3(sizeLine, sizeLine, 0.5f), color},
+        {DirectX::XMFLOAT3(width, 0.0f, 0.5f), color},
+        {DirectX::XMFLOAT3(width - sizeLine, sizeLine, 0.5f), color},
+        {DirectX::XMFLOAT3(width, height, 0.5f), color},
+        {DirectX::XMFLOAT3(width - sizeLine, height - sizeLine, 0.5f), color},
+        {DirectX::XMFLOAT3(0, height, 0.5f), color},
+        {DirectX::XMFLOAT3(sizeLine, height - sizeLine, 0.5f), color},
+        {DirectX::XMFLOAT3(0.0f, 0.f, 0.5f), color},
+        {DirectX::XMFLOAT3(sizeLine, sizeLine, 0.5f), color},
+    };
+
+    D3D11_BUFFER_DESC bd;
+    ZeroMemory(&bd, sizeof(bd));
+    bd.Usage = D3D11_USAGE_IMMUTABLE;
+    bd.ByteWidth = sizeof(vertices);
+    bd.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+    bd.CPUAccessFlags = 0;
+
+    D3D11_SUBRESOURCE_DATA Data;
+    ZeroMemory(&Data, sizeof(Data));
+    Data.pSysMem = vertices;
+
+    m_pGE->m_pDevice->CreateBuffer(&bd, &Data, &m_pVB);
+}
+
+void core::Graphics::Box::draw()
+{
+    applyPos();
+
+    UINT stride = sizeof(stVertex);
+    UINT offset = 0;
+    m_pGE->m_pDeviceContext->IASetVertexBuffers(0, 1, m_pVB.GetAddressOf(), &stride, &offset);
+    m_pGE->m_pDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+    m_pGE->m_pDeviceContext->Draw(10, 0);
+}
+
+core::Graphics::SolidRect::SolidRect(GraphicsEngine* pGE, float x, float y, float width, float height, DirectX::XMVECTORF32 color)
+{
+    m_pGE = pGE;
+    m_Pos.x = x;
+    m_Pos.y = y;
+
     stVertex vertices[]{
         {DirectX::XMFLOAT3(0.0f, 0.f, 0.5f), color},
         {DirectX::XMFLOAT3(0.0f, height, 0.5f), color},
@@ -26,11 +73,9 @@ core::Graphics::SolidBox::SolidBox(CUnkown<GraphicsEngine>& ge, float x, float y
     m_pGE->m_pDevice->CreateBuffer(&bd, &Data, &m_pVB);
 }
 
-void core::Graphics::SolidBox::draw()
+void core::Graphics::SolidRect::draw()
 {
-    m_pGE->m_constBuffer.pos.r[0].m128_f32[3] = m_Pos.x;
-    m_pGE->m_constBuffer.pos.r[1].m128_f32[3] = m_Pos.y;
-    m_pGE->applyConstBuffer();
+    applyPos();
 
     UINT stride = sizeof(stVertex);
     UINT offset = 0;
@@ -39,7 +84,7 @@ void core::Graphics::SolidBox::draw()
     m_pGE->m_pDeviceContext->Draw(4, 0);
 }
 
-core::Graphics::GraphicsEngine::GraphicsEngine(const Window& window, float widthX, float heightY)
+void core::Graphics::GraphicsEngine::init(const Window& window, float widthX, float heightY)
 {
     auto [screenWidth, screenHeight] = window.getScreenSize();
 
@@ -110,6 +155,8 @@ core::Graphics::GraphicsEngine::GraphicsEngine(const Window& window, float width
     subRes.pSysMem = &m_constBuffer;
     m_pDevice->CreateBuffer(&dsConstBuffer, &subRes, &m_pConstBuffer);
     m_pDeviceContext->VSSetConstantBuffers(0, 1, m_pConstBuffer.GetAddressOf());
+
+    onInitDevice(m_pDevice.Get(), m_pDeviceContext.Get());
 }
 
 core::Graphics::GraphicsEngine::~GraphicsEngine()

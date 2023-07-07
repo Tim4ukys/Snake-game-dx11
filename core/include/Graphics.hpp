@@ -8,7 +8,6 @@
 #include <directxmath/DirectXMath.h>
 #include <directxmath/DirectXColors.h>
 #include <boost/signals2.hpp>
-#include <core_engine.hpp>
 
 namespace core {
     namespace Graphics {
@@ -40,33 +39,50 @@ namespace core {
             void compilingShader(std::string_view fileName, std::string_view entryPoint, std::string_view shaderModel, ID3DBlob** ppBlobOut);
 
         public:
-            friend class SolidBox;
+            friend class Primitive;
+            friend class SolidRect;
+            friend class Box;
 
-            explicit GraphicsEngine(const Window& window, float widthX, float heightY);
+            GraphicsEngine() = default;
             ~GraphicsEngine();
 
             void setShaders();
             void render();
-            inline void init() {
-                onInitDevice(m_pDevice.Get(), m_pDeviceContext.Get());
-            }
+            void init(const Window& window, float widthX, float heightY);
 
             boost::signals2::signal<void(ID3D11Device*, ID3D11DeviceContext*)> onInitDevice;
             boost::signals2::signal<void(ID3D11Device*, ID3D11DeviceContext*)> onRender;
         };
 
-        class SolidBox {
-            CUnkown<GraphicsEngine> m_pGE;
+        class Primitive {
+        protected:
+            GraphicsEngine* m_pGE;
             Microsoft::WRL::ComPtr<ID3D11Buffer> m_pVB;
             DirectX::XMFLOAT2 m_Pos;
 
+            inline void applyPos() {
+                m_pGE->m_constBuffer.pos.r[0].m128_f32[3] = m_Pos.x;
+                m_pGE->m_constBuffer.pos.r[1].m128_f32[3] = m_Pos.y;
+                m_pGE->applyConstBuffer();
+            }
         public:
-            explicit SolidBox(CUnkown<GraphicsEngine>& ge, float x, float y, float width, float height, DirectX::XMVECTORF32 color);
-
             inline void setPos(float x, float y) {
                 m_Pos.x = x;
                 m_Pos.y = y;
             }
+        };
+
+        class SolidRect : public Primitive {
+        public:
+            explicit SolidRect(GraphicsEngine* pGE, float x, float y, float width, float height, DirectX::XMVECTORF32 color);
+
+            void draw();
+        };
+
+        class Box : public Primitive {
+        public:
+            explicit Box(GraphicsEngine* pGE, float x, float y, float width, float height, float sizeLine, DirectX::XMVECTORF32 color);
+
             void draw();
         };
     }
