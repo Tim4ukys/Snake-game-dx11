@@ -1,6 +1,9 @@
 #ifndef __CORE_GRAPHICS_HPP__
 #define __CORE_GRAPHICS_HPP__
 
+#pragma warning(push)
+#pragma warning(disable: 4005)
+
 #include <string_view>
 #include <Window.hpp>
 #include <wrl/client.h>
@@ -8,6 +11,8 @@
 #include <directxmath/DirectXMath.h>
 #include <directxmath/DirectXColors.h>
 #include <boost/signals2.hpp>
+
+#pragma warning(pop)
 
 namespace core {
     namespace Graphics {

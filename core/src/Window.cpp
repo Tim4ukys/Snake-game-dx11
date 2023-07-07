@@ -22,7 +22,7 @@ namespace core {
 
     Window::Window(HINSTANCE hInstance, const str& windowName, const str& className, int width, int height, int cmdShow, 
         std::function<LRESULT(HWND, UINT, WPARAM, LPARAM)> wnd_proc)
-        : m_nCmdShow(cmdShow), m_nScreenWidth(width), m_nScreenHeight(height) {
+        : m_nCmdShow(cmdShow), m_szClassName(className), m_hInstance(hInstance) {
         WNDCLASSEX wc{};
         wc.cbSize = sizeof(WNDCLASSEX);
         wc.hbrBackground = (HBRUSH)GetStockObject(BLACK_BRUSH);
@@ -59,6 +59,12 @@ namespace core {
             width, height, nullptr, nullptr, wc.hInstance, nullptr);
         if (m_hWnd == INVALID_HANDLE_VALUE)
             throw std::exception("hWnd == trash");
+    }
+
+    Window::~Window()
+    {
+        DestroyWindow(m_hWnd);
+        UnregisterClass(m_szClassName.data(), m_hInstance);
     }
 
     int Window::run() const {

@@ -86,7 +86,7 @@ void core::Graphics::SolidRect::draw()
 
 void core::Graphics::GraphicsEngine::init(const Window& window, float widthX, float heightY)
 {
-    auto [screenWidth, screenHeight] = window.getScreenSize();
+    auto [screenWidth, screenHeight] = window.getClientScreenSize();
 
     constexpr auto deviceFlags = D3D11_CREATE_DEVICE_DEBUG;
     DXGI_SWAP_CHAIN_DESC swapChainDesc{};
