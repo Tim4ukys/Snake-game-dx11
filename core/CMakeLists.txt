@@ -30,9 +30,15 @@ target_include_directories(${PROJECT_NAME}
     PUBLIC ${Boost_INCLUDE_DIR}
 )
 
-target_link_directories(${PROJECT_NAME}
-    PUBLIC "${DIRECTX_PATH}Lib/x64/"
-)
+if ("${CMAKE_SIZEOF_VOID_P}" STREQUAL "8") 
+    target_link_directories(${PROJECT_NAME}
+        PUBLIC "${DIRECTX_PATH}Lib/x64/"
+    )
+else()
+    target_link_directories(${PROJECT_NAME}
+        PUBLIC "${DIRECTX_PATH}Lib/x86/"
+    )
+endif()
 
 target_link_libraries(${PROJECT_NAME} 
     PUBLIC "d3d11.lib"
