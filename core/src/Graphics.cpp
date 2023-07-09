@@ -88,7 +88,11 @@ void core::Graphics::GraphicsEngine::init(const Window& window, float widthX, fl
 {
     auto [screenWidth, screenHeight] = window.getClientScreenSize();
 
+#ifndef NDEBUG
     constexpr auto deviceFlags = D3D11_CREATE_DEVICE_DEBUG;
+#else
+    constexpr UINT deviceFlags = 0;
+#endif
     DXGI_SWAP_CHAIN_DESC swapChainDesc{};
     swapChainDesc.BufferCount = 1;
     swapChainDesc.BufferDesc.Width = screenWidth;
