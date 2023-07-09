@@ -10,10 +10,14 @@
 namespace core {
     namespace Audio {
         class WAVFile {
-            WAVEFORMATEX m_waveFormat;
+            WAVEFORMATEX m_waveFormat{};
             std::vector<std::uint8_t> m_data;
 
         public:
+            WAVFile() = default;
+            WAVFile(const WAVFile& file) = default;
+            WAVFile(WAVFile&&) = default;
+
             explicit WAVFile(std::string_view text);
             ~WAVFile() = default;
 
@@ -23,6 +27,7 @@ namespace core {
             inline auto& getWaveFormat() const noexcept {
                 return m_waveFormat;
             }
+
         };
 
         class Source {
