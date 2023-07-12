@@ -55,15 +55,14 @@ namespace core {
         if (!RegisterClassEx(&wc))
             throw std::exception("RegisterClassEx return pizdec");
 
-        m_hWnd = CreateWindow(wc.lpszClassName, windowName.data(), WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME ^ WS_MAXIMIZEBOX, 0, 0,
-            width, height, nullptr, nullptr, wc.hInstance, nullptr);
+        m_hWnd = CreateWindow(wc.lpszClassName, windowName.data(), WS_OVERLAPPEDWINDOW ^ WS_THICKFRAME ^ WS_MAXIMIZEBOX,
+                              CW_USEDEFAULT, CW_USEDEFAULT, width, height, nullptr, nullptr, wc.hInstance, nullptr);
         if (m_hWnd == INVALID_HANDLE_VALUE)
             throw std::exception("hWnd == trash");
     }
 
     Window::~Window()
     {
-        DestroyWindow(m_hWnd);
         UnregisterClass(m_szClassName.data(), m_hInstance);
     }
 

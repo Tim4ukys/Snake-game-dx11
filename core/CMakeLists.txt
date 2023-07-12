@@ -9,7 +9,7 @@ set(SOURCE
 	"src/Audio.cpp"
     "src/Graphics.cpp"
     "src/Window.cpp"
-)
+        ../Snake/Language.cpp)
 
 add_library(${PROJECT_NAME} STATIC ${SOURCE} ${PUBLIC_HEADER})
 add_library(SNAKE::CORE ALIAS ${PROJECT_NAME})

@@ -39,6 +39,8 @@ int APIENTRY WinMain(HINSTANCE hInst, HINSTANCE hInstPrev, PSTR cmdline, int cmd
         auto& style = ImGui::GetStyle();
         style.WindowBorderSize = 0;
         style.WindowRounding = 0.0f;
+        style.ItemSpacing = {8.f, 15.f};
+        style.WindowPadding = {20.f, 20.f};
         style.Colors[ImGuiCol_WindowBg] = ImVec4(0, 0, 0, 0.45f);
         ImGui_ImplWin32_Init(window.getHWND());
         ImGui_ImplDX11_Init(pDevice, pDeviceContext);

@@ -72,6 +72,10 @@ namespace core {
                 m_pXAMasterVoice->DestroyVoice();
             }
 
+            void setVolume(float v) {
+                m_pXAMasterVoice->SetVolume(v);
+            }
+
             void createSource(std::shared_ptr<Source>& source, const WAVEFORMATEX* waveFormat) {
                 source = std::make_shared<Source>();
                 m_pXA->CreateSourceVoice(&source->m_pXASourceVoice, waveFormat);

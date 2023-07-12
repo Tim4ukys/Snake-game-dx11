@@ -118,8 +118,8 @@ void core::Graphics::GraphicsEngine::init(const Window& window, float widthX, fl
     m_pDeviceContext->OMSetRenderTargets(1, m_pRenderTargetView.GetAddressOf(), NULL);
 
     D3D11_VIEWPORT vp;
-    vp.Width = screenWidth;
-    vp.Height = screenHeight;
+    vp.Width = static_cast<float>(screenWidth);
+    vp.Height = static_cast<float>(screenHeight);
     vp.MinDepth = 0.0f;
     vp.MaxDepth = 1.0f;
     vp.TopLeftX = 0;
