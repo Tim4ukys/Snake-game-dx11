@@ -4,11 +4,15 @@ set(SOURCE
 	"main.cpp"
 	"Game.cpp"
 	"AudioMan.cpp"
+	"Language.cpp"
 )
 set(HEADERS
-		"main.hpp"
-		"Game.hpp"
-		"AudioMan.hpp" Timer.hpp Language.hpp Config.hpp)
+	"main.hpp"
+	"Game.hpp"
+	"AudioMan.hpp" 
+	"Timer.hpp" 
+	"Language.hpp" 
+	"Config.hpp")
 
 add_executable(${PROJECT_NAME} WIN32 ${SOURCE} ${HEADERS})
 
