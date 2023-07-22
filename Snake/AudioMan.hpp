@@ -9,7 +9,7 @@
 class AudioMan {
     std::vector<std::shared_ptr<core::Audio::Source>> m_Sources;
     core::Audio::AudioEngine* m_pAE;
-    google::dense_hash_map<std::string, core::Audio::WAVFile, std::hash<std::string>> m_musics;
+    google::dense_hash_map<std::string, core::Audio::OGGFile, std::hash<std::string>> m_musics;
 
 public:
     AudioMan(core::Audio::AudioEngine* pAE);

@@ -23,6 +23,7 @@ set(DIRECTX_PATH $ENV{DXSDK_DIR})
 find_package(directxmath CONFIG REQUIRED)
 find_package(asmjit CONFIG REQUIRED)
 find_package(Boost REQUIRED)
+find_package(OpusFile CONFIG REQUIRED)
 
 target_include_directories(${PROJECT_NAME} 
     PUBLIC "${CMAKE_CURRENT_SOURCE_DIR}/include/"
@@ -45,4 +46,5 @@ target_link_libraries(${PROJECT_NAME}
     PUBLIC "d3dx11.lib"
     PUBLIC asmjit::asmjit
     PUBLIC Microsoft::DirectXMath
+    PUBLIC OpusFile::opusfile
 )

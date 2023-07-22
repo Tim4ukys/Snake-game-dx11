@@ -30,6 +30,26 @@ namespace core {
 
         };
 
+        class OGGFile {
+            WAVEFORMATEX m_waveFormat{};
+            std::vector<std::uint8_t> m_data;
+
+        public:
+            OGGFile() = default;
+            OGGFile(const OGGFile& file) = default;
+            OGGFile(OGGFile&&) = default;
+
+            explicit OGGFile(std::string_view text);
+            ~OGGFile() = default;
+
+            inline auto& getData() const noexcept {
+                return m_data;
+            }
+            inline auto& getWaveFormat() const noexcept {
+                return m_waveFormat;
+            }
+        };
+
         class Source {
             IXAudio2SourceVoice* m_pXASourceVoice{};
             XAUDIO2_BUFFER m_XABuffer{};
@@ -46,6 +66,14 @@ namespace core {
 
             inline void playSound(const WAVFile& WAVfile) noexcept {
                 const auto& file = WAVfile.getData();
+                m_XABuffer.AudioBytes = file.size();
+                m_XABuffer.pAudioData = file.data();
+                m_pXASourceVoice->SubmitSourceBuffer(&m_XABuffer);
+                m_pXASourceVoice->Start(0);
+            }
+
+            inline void playSound(const OGGFile& OGGfile) noexcept {
+                const auto& file = OGGfile.getData();
                 m_XABuffer.AudioBytes = file.size();
                 m_XABuffer.pAudioData = file.data();
                 m_pXASourceVoice->SubmitSourceBuffer(&m_XABuffer);

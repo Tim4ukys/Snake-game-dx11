@@ -7,7 +7,7 @@ AudioMan::AudioMan(core::Audio::AudioEngine* pAE) : m_pAE(pAE)
     for (auto& file : std::filesystem::directory_iterator("music")) {
         auto name = file.path().filename().string();
         name.erase(name.end() - file.path().extension().string().size(), name.end());
-        m_musics.insert({name, core::Audio::WAVFile(file.path().string())});
+        m_musics.insert({name, core::Audio::OGGFile(file.path().string())});
     }
 }
 
